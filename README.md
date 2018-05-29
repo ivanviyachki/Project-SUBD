@@ -8,4 +8,4 @@
 Използвани тежнологии:
 - Java
 - Spring Framework
--MySQL
+- MySQL
