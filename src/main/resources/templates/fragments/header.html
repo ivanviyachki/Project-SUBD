@@ -1,0 +1,45 @@
+<header th:fragment="header" th:remove="tag">
+    <!--<img id="cover-image" th:src="@{/img/background2.jpeg}"/>-->
+
+    <nav id="nav">
+        <div class="nav-content fonts-regular">
+            <p class="logo logo-mobile">
+                <a th:href="@{/}" title="The Aesthetic Beast">
+                    <img class="logo-img" th:src="@{/img/logo-8.png}" alt="The Aesthetic Beast"/>
+                </a>
+            </p>
+
+            <br class="logo-mobile-br"/>
+
+            <p class="text-left alpha">
+                <a class="underline" th:href="@{/fitness}">Fitness</a>
+            </p>
+
+            <p class="text-left">
+                <a class="underline" th:href="@{/lifestyle}">Lifestyle</a>
+            </p>
+
+            <p class="text-left">
+                <a class="underline" th:href="@{/food}">Food</a>
+            </p>
+
+            <p class="logo logo-normal">
+                <a th:href="@{/}" title="The Aesthetic Beast">
+                    <img class="logo-img" th:src="@{/img/logo-8.png}" alt="The Aesthetic Beast"/>
+                </a>
+            </p>
+
+            <p class="text-right">
+                <a class="underline" th:href="@{/}">Home</a>
+            </p>
+
+            <p class="text-right">
+                <a class="underline" th:href="@{/about}">About</a>
+            </p>
+
+            <p class="text-right omega">
+                <a class="underline" th:href="@{/contact}">Contact</a>
+            </p>
+        </div>
+    </nav>
+</header>

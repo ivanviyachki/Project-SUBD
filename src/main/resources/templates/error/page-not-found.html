@@ -1,0 +1,19 @@
+<main th:remove="tag">
+    <div class="main-container clearfix">
+        <div class="page-section text-center">
+            <h1 class="fonts-bangers">Oh snap! It looks like there's nothing here.</h1>
+            <p class="fonts-regular">Maybe try a search, or just go back to the start?</p>
+
+            <div class="page-subsection">
+                <form th:action="@{/}" th:object="${s}">
+                    <input type="search" placeholder="Search..." th:value="${s}" name="s"/>
+                    <input type="submit" class="search-submit" onClick="return checker();" value="Search"/>
+                </form>
+
+                <div>
+                    <a th:href="@{/}"><button class="btn fonts-bangers">Go Home</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
