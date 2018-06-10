@@ -1,9 +1,6 @@
 package healthblog.services;
 
 import healthblog.models.Article;
-import healthblog.repositories.ArticleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -21,24 +18,36 @@ public class ArticleServiceStubImpl implements ArticleService {
     }
 
     public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+        //return articleRepository.findAll();
+        return null; //TODO
     }
 
     public boolean articleExists(Integer id) {
-        return articleRepository.exists(id);
+        //return articleRepository.exists(id);
+        return false; //TODO
     }
 
     public Article findArticle(Integer id) {
-        return articleRepository.findOne(id);
+        //return articleRepository.findOne(id);
+        return null; //TODO
     }
 
     public void deleteArticle(Article article) {
-        articleRepository.delete(article);
+        //articleRepository.delete(article);
+        //TODO
     }
 
     public void saveArticle(Article article) throws SQLException {
-        PreparedStatement query = con.prepareStatement("INSERT INTO Articles(Id, Name) VALUES (?, ?)");
+        PreparedStatement query = con.prepareStatement("INSERT INTO Articles(Category, Title, AuthorId, Date) VALUES (?, ?, ?, ?)");
 
-        articleRepository.saveAndFlush(article);
+        //TODO CHECK INPUT
+
+        query.setString( 1, article.getCategory());
+        query.setString( 2, article.getTitle());
+        query.setInt( 3, article.getAuthor().getId());
+        query.setDate( 4, new java.sql.Date(article.getDate().getTime()));
+
+        int affectedRows = query.executeUpdate();
+
     }
 }
