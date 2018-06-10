@@ -20,8 +20,8 @@ public class User {
 
     public User(String email, String fullName, String password) {
         this.email = email;
-        this.password = password;
         this.fullName = fullName;
+        this.password = password;
 
         this.roles = new HashSet<>();
         this.articles = new TreeSet<>();

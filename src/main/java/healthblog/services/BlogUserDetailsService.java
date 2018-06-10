@@ -7,22 +7,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import healthblog.models.User;
-import healthblog.repositories.UserRepository;
 
+import java.sql.SQLException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service("blogUserDetailsService")
 public class BlogUserDetailsService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public BlogUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public BlogUserDetailsService(UserService userService) {
+        this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+        User user = null;
+        try {
+            user = userService.findByEmail(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid User");
