@@ -1,11 +1,5 @@
 package healthblog.models;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
-@Table(name = "images")
 public class Image {
     private Integer id;
 
@@ -20,8 +14,6 @@ public class Image {
         this.article = article;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -30,7 +22,6 @@ public class Image {
         this.id = id;
     }
 
-    @Column(name = "path", nullable = false)
     public String getPath() {
         return path;
     }
@@ -39,8 +30,6 @@ public class Image {
         this.path = path;
     }
 
-    @ManyToOne()
-    @JoinColumn(name = "articleId")
     public Article getArticle() {
         return article;
     }

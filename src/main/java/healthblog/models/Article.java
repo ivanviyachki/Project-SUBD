@@ -1,16 +1,9 @@
 package healthblog.models;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "articles")
 public class Article {
     private Integer id;
 
@@ -40,8 +33,6 @@ public class Article {
         this.images = new ArrayList<>();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -50,7 +41,6 @@ public class Article {
         this.id = id;
     }
 
-    @Column(name = "category", nullable = false)
     public String getCategory() {
         return category;
     }
@@ -59,7 +49,6 @@ public class Article {
         this.category = category;
     }
 
-    @Column(name = "title", nullable = false)
     public String getTitle() {
         return title;
     }
@@ -68,7 +57,6 @@ public class Article {
         this.title = title;
     }
 
-    @Column(name = "content", columnDefinition = "text", nullable = false)
     public String getContent() {
         return content;
     }
@@ -77,8 +65,6 @@ public class Article {
         this.content = content;
     }
 
-    @ManyToOne()
-    @JoinColumn(name = "authorId", nullable = false)
     public User getAuthor() {
         return author;
     }
@@ -87,15 +73,12 @@ public class Article {
         this.author = author;
     }
 
-    @Transient
     public String getSummary(){
         int endIndex = this.getContent().length() / 2;
 
         return this.getContent().substring(0, endIndex) + "...";
     }
 
-    @OneToMany(mappedBy = "article")
-    @Fetch(value = FetchMode.SUBSELECT)
     public List<Image> getImages() {
         return images;
     }
@@ -108,10 +91,6 @@ public class Article {
         this.images.add(image);
     }
 
-    @Column(columnDefinition = "DATETIME", nullable = false)
-    //@Column(insertable = false, updatable = false, columnDefinition = "timestamptz") //postgresql
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
     public Date getDate() {
         return date;
     }
@@ -120,8 +99,6 @@ public class Article {
         this.date = date;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "articles_tags")
     public List<Tag> getTags() {
         return tags;
     }
