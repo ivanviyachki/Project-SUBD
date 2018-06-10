@@ -1,11 +1,8 @@
 package healthblog.models;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "roles")
 public class Role {
 
     private Integer id;
@@ -23,8 +20,6 @@ public class Role {
         this.users = new HashSet<>();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -33,7 +28,6 @@ public class Role {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -42,7 +36,6 @@ public class Role {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "roles")
     public Set<User> getUsers() {
         return users;
     }

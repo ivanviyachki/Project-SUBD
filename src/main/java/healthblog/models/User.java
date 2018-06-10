@@ -1,12 +1,9 @@
 package healthblog.models;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-@Entity
-@Table(name = "users")
 public class User {
 
     private Integer id;
@@ -32,8 +29,6 @@ public class User {
 
     public User() {    }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -42,7 +37,6 @@ public class User {
         this.id = id;
     }
 
-    @Column(name = "email", unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -51,7 +45,6 @@ public class User {
         this.email = email;
     }
 
-    @Column(name = "fullName", nullable = false)
     public String getFullName() {
         return fullName;
     }
@@ -60,7 +53,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    @Column(name = "password", length = 60, nullable = false)
     public String getPassword() {
         return password;
     }
@@ -69,8 +61,6 @@ public class User {
         this.password = password;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles")
     public Set<Role> getRoles() {
         return roles;
     }
@@ -83,7 +73,6 @@ public class User {
         this.roles.add(role);
     }
 
-    @OneToMany(mappedBy = "author")
     public Set<Article> getArticles() {
         return articles;
     }
