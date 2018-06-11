@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*;
 
 @Controller
@@ -125,7 +126,7 @@ public class ArticleController {
 
     @PostMapping("/article/create")
     @PreAuthorize("isAuthenticated()")
-    public String createProcess(ArticleBindingModel articleBindingModel) throws IOException {
+    public String createProcess(ArticleBindingModel articleBindingModel) throws IOException, SQLException {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User userEntity = this.userService.findByEmail(user.getUsername());
@@ -142,18 +143,18 @@ public class ArticleController {
             addTagsToArticle(articleBindingModel.getTags().trim().split("\\s*,\\s*"), article);
         }
 
-        this.articleService.saveArticle(article);
+        this.articleService.createArticle(article);
 
         saveImagesAndSetToArticle(articleBindingModel.getImages(), article);
 
-        this.articleService.saveArticle(article);
+        this.articleService.createArticle(article);
 
-        return "redirect:/article/" + article.getId();
+        return "redirect:/article/" + article.getTitle();
     }
 
-    @GetMapping("article/{id}")
-    public String details(Model model, @PathVariable Integer id) {
-        Article article = this.articleService.findArticle(id);
+    @GetMapping("article/{title}")
+    public String details(Model model, @PathVariable String title) throws SQLException {
+        Article article = this.articleService.findArticle(title);
 
         if (article == null) return "redirect:/";
 
@@ -201,10 +202,10 @@ public class ArticleController {
         return "base-layout";
     }
 
-    @GetMapping("article/edit/{id}")
+    @GetMapping("article/edit/{title}")
     @PreAuthorize("isAuthenticated()")
-    public String edit(Model model, @PathVariable Integer id) {
-        Article article = this.articleService.findArticle(id);
+    public String edit(Model model, @PathVariable String title) throws SQLException {
+        Article article = this.articleService.findArticle(title);
 
         if (article == null) return "redirect:/";
 
@@ -226,10 +227,10 @@ public class ArticleController {
         return "base-layout";
     }
 
-    @PostMapping("article/edit/{id}")
+    @PostMapping("article/edit/{title}")
     @PreAuthorize("isAuthenticated()")
-    public String editProcess(ArticleBindingModel articleBindingModel, @PathVariable Integer id) throws IOException {
-        Article article = this.articleService.findArticle(id);
+    public String editProcess(ArticleBindingModel articleBindingModel, @PathVariable String title) throws IOException, SQLException {
+        Article article = this.articleService.findArticle(title);
 
         if (article == null) return "redirect:/";
 
@@ -255,15 +256,15 @@ public class ArticleController {
             saveImagesAndSetToArticle(articleBindingModel.getImages(), article);
         }
 
-        this.articleService.saveArticle(article);
+        this.articleService.updateArticle(article);
 
-        return "redirect:/article/" + article.getId();
+        return "redirect:/article/" + article.getTitle();
     }
 
-    @GetMapping("article/delete/{id}")
+    @GetMapping("article/delete/{title}")
     @PreAuthorize("isAuthenticated()")
-    public String delete(Model model, @PathVariable Integer id) {
-        Article article = this.articleService.findArticle(id);
+    public String delete(Model model, @PathVariable String title) throws SQLException {
+        Article article = this.articleService.findArticle(title);
 
         if(article == null) return "redirect:/";
 
@@ -282,10 +283,10 @@ public class ArticleController {
         return "base-layout";
     }
 
-    @PostMapping("article/delete/{id}")
+    @PostMapping("article/delete/{title}")
     @PreAuthorize("isAuthenticated()")
-    public String deleteProcess(Model model, @PathVariable Integer id){
-        Article article = this.articleService.findArticle(id);
+    public String deleteProcess(Model model, @PathVariable String title) throws SQLException {
+        Article article = this.articleService.findArticle(title);
 
         if(article == null) return "redirect:/";
 
