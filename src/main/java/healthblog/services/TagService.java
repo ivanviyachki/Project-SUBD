@@ -1,5 +1,6 @@
 package healthblog.services;
 
+import healthblog.models.Article;
 import healthblog.models.Tag;
 
 import java.util.List;
@@ -10,4 +11,6 @@ public interface TagService {
     void saveTag(Tag tag);
 
     List<Tag> getAllTags();
+
+    List<Tag> getAllTagsFromArticle(Article article);
 }
