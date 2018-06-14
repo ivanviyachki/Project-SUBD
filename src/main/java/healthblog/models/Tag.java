@@ -1,11 +1,8 @@
 package healthblog.models;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "tags")
 public class Tag {
     private Integer id;
 
@@ -20,8 +17,12 @@ public class Tag {
         this.articles = new ArrayList<Article>();
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Tag(String name, Integer id) {
+        this.id = id;
+        this.name = name;
+        this.articles = new ArrayList<Article>();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -30,7 +31,6 @@ public class Tag {
         this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -39,7 +39,6 @@ public class Tag {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "tags")
     public List<Article> getArticles() {
         return articles;
     }

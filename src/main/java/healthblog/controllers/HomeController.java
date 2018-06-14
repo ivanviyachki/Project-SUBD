@@ -3,16 +3,13 @@ package healthblog.controllers;
 import healthblog.models.Tag;
 import healthblog.services.ArticleService;
 import healthblog.services.TagService;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import healthblog.models.Article;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,7 +72,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String search(@RequestParam(value = "s", required = false) String s, Model model) {
+    public String search(@RequestParam(value = "s", required = false) String s, Model model) throws SQLException {
         List<Article> articles = new ArrayList<>();
 
         try {
@@ -129,7 +126,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/page/{pageNum}", method = RequestMethod.GET)
-    public String paging(@RequestParam(value = "s", required = false) String s, Model model, @PathVariable Integer pageNum) {
+    public String paging(@RequestParam(value = "s", required = false) String s, Model model, @PathVariable Integer pageNum) throws SQLException {
         List<Article> articlesPerPage = new ArrayList<>();
 
         List<Article> searchedArticles = this.articleService.getAllArticles();
@@ -176,7 +173,7 @@ public class HomeController {
     }
 
     @GetMapping("/{tagName}")
-    public String popularTag(Model model, @PathVariable String tagName){
+    public String popularTag(Model model, @PathVariable String tagName) throws SQLException {
         Tag tag = this.tagService.findTag(tagName);
 
         if(tag == null) {
@@ -201,7 +198,7 @@ public class HomeController {
     }
 
     @GetMapping("/fitness")
-    public String fitness(Model model) {
+    public String fitness(Model model) throws SQLException {
         List<Article> articles = new ArrayList<>();
 
         try {
@@ -225,7 +222,7 @@ public class HomeController {
     }
 
     @GetMapping("/fitness/page/{pageNum}")
-    public String fitnessPaging(Model model, @PathVariable Integer pageNum) {
+    public String fitnessPaging(Model model, @PathVariable Integer pageNum) throws SQLException {
         if(pageNum <= 1) {
             return "redirect:/fitness";
         }
@@ -253,7 +250,7 @@ public class HomeController {
     }
 
     @GetMapping("/food")
-    public String food(Model model) {
+    public String food(Model model) throws SQLException {
         List<Article> articles = new ArrayList<>();
 
         try {
@@ -277,7 +274,7 @@ public class HomeController {
     }
 
     @GetMapping("/food/page/{pageNum}")
-    public String foodPaging(Model model, @PathVariable Integer pageNum) {
+    public String foodPaging(Model model, @PathVariable Integer pageNum) throws SQLException {
         if(pageNum <= 1) {
             return "redirect:/food";
         }
@@ -305,7 +302,7 @@ public class HomeController {
     }
 
     @GetMapping("/lifestyle")
-    public String lifestyle(Model model) {
+    public String lifestyle(Model model) throws SQLException {
         List<Article> articles = new ArrayList<>();
 
         try {
@@ -329,7 +326,7 @@ public class HomeController {
     }
 
     @GetMapping("/lifestyle/page/{pageNum}")
-    public String lifestylePaging(Model model, @PathVariable Integer pageNum) {
+    public String lifestylePaging(Model model, @PathVariable Integer pageNum) throws SQLException {
         if(pageNum <= 1) {
             return "redirect:/lifestyle";
         }
