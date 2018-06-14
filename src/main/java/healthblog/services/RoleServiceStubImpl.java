@@ -26,12 +26,13 @@ public class RoleServiceStubImpl implements RoleService {
         query.setInt( 1, id);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         String resultName = result.getString("Name");
 
         Set<Integer> usersId = getUsers(id);
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return new Role(id, resultName, usersId);
@@ -47,12 +48,13 @@ public class RoleServiceStubImpl implements RoleService {
         query.setString( 1, name);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         Integer resultId = result.getInt("Id");
 
         Set<Integer> usersId = getUsers(resultId);
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return new Role(resultId, name, usersId);
@@ -75,6 +77,8 @@ public class RoleServiceStubImpl implements RoleService {
             users.add(result.getInt("UserId"));
         }
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return users;

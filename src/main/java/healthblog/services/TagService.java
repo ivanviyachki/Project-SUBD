@@ -12,21 +12,15 @@ public interface TagService {
 
     Tag findById(Integer id) throws SQLException;
 
-<<<<<<< HEAD
-    List<Tag> getAllTags();
+    List<Tag> getAllTags() throws SQLException;
 
-    List<Tag> getAllTagsFromArticle(Article article);
-=======
     void createTag(Tag tag) throws SQLException;
 
     void updateTag(String name, Tag tag) throws SQLException;
 
     void deleteArticle(String name) throws SQLException;
 
-    List<Tag> getAllTags() throws SQLException;
-
     Set<Integer> getArticles(Integer TagId) throws SQLException;
 
     Set<Integer> getTags(Integer ArticleId) throws SQLException;
->>>>>>> refs/remotes/origin/master
 }

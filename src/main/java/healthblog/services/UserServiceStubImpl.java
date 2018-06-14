@@ -15,6 +15,9 @@ public class UserServiceStubImpl implements UserService {
     @Autowired
     private JdbcConnection jdbcConnection;
 
+    @Autowired
+    private RoleServiceStubImpl roleService;
+
     public UserServiceStubImpl() throws SQLException {
     }
 
@@ -28,7 +31,6 @@ public class UserServiceStubImpl implements UserService {
         query.setInt( 1, id);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         String resultEmail = result.getString("Email");
         String resultFullName = result.getString("FullName");
@@ -37,7 +39,8 @@ public class UserServiceStubImpl implements UserService {
         Set<Integer> resultRoles = getRoles(id);
         Set<Integer> resultArticles = getArticles(id);
 
-
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return new User(id, resultEmail, resultFullName, resultPassword, resultRoles, resultArticles);
@@ -53,7 +56,6 @@ public class UserServiceStubImpl implements UserService {
         query.setString( 1, email);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         Integer resultId = result.getInt("Id");
         String resultFullName = result.getString("FullName");
@@ -62,6 +64,8 @@ public class UserServiceStubImpl implements UserService {
         Set<Integer> resultRoles = getRoles(resultId);
         Set<Integer> resultArticles = getArticles(resultId);
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return new User(resultId, email, resultFullName, resultPassword, resultRoles, resultArticles);
@@ -75,7 +79,6 @@ public class UserServiceStubImpl implements UserService {
         //TODO CHECK INPUT
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         List<User> users = new ArrayList<>();
         while (result.next()) {
@@ -90,6 +93,8 @@ public class UserServiceStubImpl implements UserService {
             users.add(new User(resultId, resultEmail, fullName, password, resultRoles, resultArticles));
         }
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return users;
@@ -107,6 +112,13 @@ public class UserServiceStubImpl implements UserService {
         query.setString( 3, user.getPassword());
 
         int affectedRows = query.executeUpdate();
+
+//        Integer id = findByEmail(user.getEmail()).getId();
+//
+//        query = con.prepareStatement("INSERT INTO Users_Roles(UserId, RoleId) VALUES (?, ?)");
+//
+//        query.setInt( 1, id);
+//        query.setInt( 2, );
 
         this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
@@ -128,16 +140,19 @@ public class UserServiceStubImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user) throws SQLException {
+    public void updateUser(String email, User user) throws SQLException {
         Connection con = this.jdbcConnection.getConnection();
-        PreparedStatement query = con.prepareStatement("UPDATE Users SET Email = ?, FullName = ?, Password = ? WHERE Id = ?");
+
+
+
+        PreparedStatement query = con.prepareStatement("UPDATE Users SET Email = ?, FullName = ?, Password = ? WHERE Email = ?");
 
         //TODO CHECK INPUT
 
         query.setString( 1, user.getEmail());
         query.setString( 2, user.getFullName());
         query.setString( 3, user.getPassword());
-        query.setInt( 4, user.getId());
+        query.setString( 4, email);
 
         int affectedRows = query.executeUpdate();
 
@@ -156,13 +171,14 @@ public class UserServiceStubImpl implements UserService {
         query.setInt(1, userId);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         Set<Integer> roles = new HashSet<>();
         while (result.next()) {
             roles.add(result.getInt("RoleId"));
         }
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return roles;
@@ -179,13 +195,14 @@ public class UserServiceStubImpl implements UserService {
         query.setInt(1, userId);
 
         ResultSet result = query.executeQuery();
-        this.jdbcConnection.closePreparedStatement(query);
 
         Set<Integer> articles = new HashSet<>();
         while (result.next()) {
             articles.add(result.getInt("Id"));
         }
 
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
 
         return articles;

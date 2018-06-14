@@ -19,7 +19,7 @@ public interface UserService {
 
     void deleteUser(User user) throws SQLException;
 
-    void updateUser(User user) throws SQLException;
+    void updateUser(String email, User user) throws SQLException;
 
     Set<Integer> getRoles(Integer userId) throws SQLException;
 
