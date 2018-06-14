@@ -10,6 +10,13 @@ public class Image {
     public Image() {    }
 
     public Image(String path, Article article) {
+        this.id = id;
+        this.path = path;
+        this.article = article;
+    }
+
+    public Image(Integer id, String path, Article article) {
+        this.id = id;
         this.path = path;
         this.article = article;
     }

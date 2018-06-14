@@ -33,6 +33,17 @@ public class Article {
         this.images = new ArrayList<>();
     }
 
+    public Article(Integer id, String category, String title, String content, User author, Date date) {
+        this.id = id;
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.date = date;
+        this.tags = new ArrayList<>();
+        this.images = new ArrayList<>();
+    }
+
     public Integer getId() {
         return id;
     }

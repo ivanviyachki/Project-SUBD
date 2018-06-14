@@ -6,13 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ArticleService {
-    List<Article> getAllArticles();
+    void createArticle(Article article) throws SQLException;
 
-    boolean articleExists(Integer id);
+    List<Article> getAllArticles() throws SQLException;
 
-    Article findArticle(Integer id);
+    Article findArticle(String title)throws SQLException;
 
-    void deleteArticle(Article article);
+    Article findById(int id) throws SQLException;
 
-    void saveArticle(Article article) throws SQLException;
+    void updateArticle(Article article, String title)throws SQLException;
+
+    void deleteArticle(Article article)throws SQLException;
 }

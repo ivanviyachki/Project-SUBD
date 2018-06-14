@@ -56,7 +56,7 @@ public class ArticleController {
         }
     }
 
-    private void saveImagesAndSetToArticle(List<MultipartFile> images, Article article) throws IOException {
+    private void saveImagesAndSetToArticle(List<MultipartFile> images, Article article) throws IOException, SQLException {
         for(MultipartFile imageFile : images) {
             byte[] imageBytes = imageFile.getBytes();
 
@@ -77,7 +77,7 @@ public class ArticleController {
             if(image == null) {
                 image = new Image(imagePath.toString(), article);
 
-                this.imageService.saveImage(image);
+                this.imageService.createImage(image);
             }
 
             article.addImage(image);
@@ -142,8 +142,6 @@ public class ArticleController {
         if(!articleBindingModel.getTags().isEmpty()) {
             addTagsToArticle(articleBindingModel.getTags().trim().split("\\s*,\\s*"), article);
         }
-
-        this.articleService.createArticle(article);
 
         saveImagesAndSetToArticle(articleBindingModel.getImages(), article);
 
@@ -256,7 +254,7 @@ public class ArticleController {
             saveImagesAndSetToArticle(articleBindingModel.getImages(), article);
         }
 
-        this.articleService.updateArticle(article);
+        this.articleService.updateArticle(article, articleBindingModel.getTitle());
 
         return "redirect:/article/" + article.getTitle();
     }
