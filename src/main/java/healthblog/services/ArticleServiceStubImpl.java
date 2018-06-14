@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service("articleService")
 public class ArticleServiceStubImpl implements ArticleService {
@@ -69,13 +70,12 @@ public class ArticleServiceStubImpl implements ArticleService {
 
             User user = this.userService.findById(authorId);
 
-            Article article = new Article(articleId, category, title, content, user, date);
+            Set<Integer> resultRoles = this.tagService.getTags(articleId);
+
+            Article article = new Article(articleId, category, title, content, user, date, resultRoles);
 
             List<Image> images = this.imageService.getAllImagesFromArticle(article);
             article.setImages(images);
-
-            List<Tag> tags = this.tagService.getAllTagsFromArticle(article);
-            article.setTags(tags);
 
             articles.add(article);
         }
@@ -107,13 +107,12 @@ public class ArticleServiceStubImpl implements ArticleService {
 
         User user = this.userService.findById(authorId);
 
-        Article article = new Article(articleId, category, resultTitle, content, user, date);
+        Set<Integer> resultRoles = this.tagService.getTags(articleId);
+
+        Article article = new Article(articleId, category, title, content, user, date, resultRoles);
 
         List<Image> images = this.imageService.getAllImagesFromArticle(article);
         article.setImages(images);
-
-        List<Tag> tags = this.tagService.getAllTagsFromArticle(article);
-        article.setTags(tags);
 
         this.jdbcConnection.closeResultSet(result);
         this.jdbcConnection.closePreparedStatement(query);
@@ -142,13 +141,12 @@ public class ArticleServiceStubImpl implements ArticleService {
 
         User user = this.userService.findById(authorId);
 
-        Article article = new Article(articleId, category, resultTitle, content, user, date);
+        Set<Integer> resultRoles = this.tagService.getTags(articleId);
+
+        Article article = new Article(articleId, category, resultTitle, content, user, date, resultRoles);
 
         List<Image> images = this.imageService.getAllImagesFromArticle(article);
         article.setImages(images);
-
-        List<Tag> tags = this.tagService.getAllTagsFromArticle(article);
-        article.setTags(tags);
 
         this.jdbcConnection.closeResultSet(result);
         this.jdbcConnection.closePreparedStatement(query);

@@ -3,6 +3,7 @@ package healthblog.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class Article {
     private Integer id;
@@ -21,9 +22,11 @@ public class Article {
 
     private List<Tag> tags;
 
+    private Set<Integer> tagsId;
+
     public Article() {   }
 
-    public Article(String category, String title, String content, User author, Date date) {
+    public Article(String category, String title, String content, User author, Date date, Set<Integer> tagsId) {
         this.category = category;
         this.title = title;
         this.content = content;
@@ -31,9 +34,10 @@ public class Article {
         this.date = date;
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
+        this.tagsId = tagsId;
     }
 
-    public Article(Integer id, String category, String title, String content, User author, Date date) {
+    public Article(Integer id, String category, String title, String content, User author, Date date, Set<Integer> tagsId) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -42,6 +46,7 @@ public class Article {
         this.date = date;
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
+        this.tagsId = tagsId;
     }
 
     public Integer getId() {
