@@ -14,20 +14,23 @@ public class User {
 
     private String password;
 
-    private Set<Role> roles;
+    private Set<Integer> rolesId;
 
-    private Set<Article> articles;
+    private Set<Integer> articlesId;
 
-    public User(String email, String fullName, String password) {
+    public User(Integer id, String email, String fullName, String password, Set<Integer> rolesId, Set<Integer> articlesId) {
+        this.id = id;
         this.email = email;
         this.fullName = fullName;
         this.password = password;
-
-        this.roles = new HashSet<>();
-        this.articles = new TreeSet<>();
+        this.rolesId = rolesId;
+        this.articlesId = articlesId;
     }
 
-    public User() {    }
+    public User() {
+        rolesId = new HashSet<>();
+        articlesId = new HashSet<>();
+    }
 
     public Integer getId() {
         return id;
@@ -61,23 +64,19 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Integer> getRolesId() {
+        return rolesId;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRolesId(Set<Integer> rolesId) {
+        this.rolesId = rolesId;
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public Set<Integer> getArticlesId() {
+        return articlesId;
     }
 
-    public Set<Article> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(Set<Article> articles) {
-        this.articles = articles;
+    public void setArticlesId(Set<Integer> articlesId) {
+        this.articlesId = articlesId;
     }
 }

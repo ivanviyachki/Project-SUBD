@@ -9,15 +9,16 @@ public class Role {
 
     private String name;
 
-    private Set<User> users;
+    private Set<Integer> usersId;
 
-    public Role(String name) {
+    public Role(Integer id, String name, Set<Integer> usersId) {
+        this.id = id;
         this.name = name;
-        this.users = new HashSet<>();
+        this.usersId = usersId;
     }
 
     public Role() {
-        this.users = new HashSet<>();
+        this.usersId = new HashSet<>();
     }
 
     public Integer getId() {
@@ -36,11 +37,11 @@ public class Role {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<Integer> getUsersId() {
+        return usersId;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUsersId(Set<Integer> usersId) {
+        this.usersId = usersId;
     }
 }
