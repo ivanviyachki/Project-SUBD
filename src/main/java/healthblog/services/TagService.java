@@ -3,14 +3,30 @@ package healthblog.services;
 import healthblog.models.Article;
 import healthblog.models.Tag;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 public interface TagService {
-    Tag findTag(String tag);
+    Tag findTag(String tag) throws SQLException;
 
-    void saveTag(Tag tag);
+    Tag findById(Integer id) throws SQLException;
 
+<<<<<<< HEAD
     List<Tag> getAllTags();
 
     List<Tag> getAllTagsFromArticle(Article article);
+=======
+    void createTag(Tag tag) throws SQLException;
+
+    void updateTag(String name, Tag tag) throws SQLException;
+
+    void deleteArticle(String name) throws SQLException;
+
+    List<Tag> getAllTags() throws SQLException;
+
+    Set<Integer> getArticles(Integer TagId) throws SQLException;
+
+    Set<Integer> getTags(Integer ArticleId) throws SQLException;
+>>>>>>> refs/remotes/origin/master
 }
