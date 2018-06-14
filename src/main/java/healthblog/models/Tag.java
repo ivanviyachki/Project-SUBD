@@ -2,6 +2,7 @@ package healthblog.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Tag {
     private Integer id;
@@ -10,10 +11,18 @@ public class Tag {
 
     private List<Article> articles;
 
+    private Set<Integer> articlesId;
+
     public Tag() {  }
 
     public Tag(String name) {
         this.name = name;
+        this.articles = new ArrayList<Article>();
+    }
+
+    public Tag(String name, Set<Integer> articlesId) {
+        this.name = name;
+        this.articlesId = articlesId;
         this.articles = new ArrayList<Article>();
     }
 
