@@ -1,17 +1,23 @@
 package healthblog.services;
 
+import healthblog.models.Article;
 import healthblog.models.Image;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ImageService {
-    List<Image> getAllImages();
+    void createImage(Image image) throws SQLException;
 
-    boolean imageExists(Integer id);
+    List<Image> getAllImages() throws SQLException;
 
-    Image findImage(String path);
+    List<Image> getAllImagesFromArticle(Article article) throws SQLException;
 
-    void deleteImage(Image image);
+    Image findImage(String path) throws SQLException;
 
-    void saveImage(Image image);
+    Image findById(Integer id) throws SQLException;
+
+    void updateImage(Image image, String path)throws SQLException;
+
+    void deleteImage(Image image) throws SQLException;
 }
