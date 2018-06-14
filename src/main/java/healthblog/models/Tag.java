@@ -1,6 +1,5 @@
 package healthblog.models;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class Tag {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public List<Article> getArticles() {
         return articles;
     }
