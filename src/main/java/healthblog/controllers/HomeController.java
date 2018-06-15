@@ -57,7 +57,7 @@ public class HomeController {
         return searchedArticles;
     }
 
-    private List<String> getPopularTags() {
+    private List<String> getPopularTags() throws SQLException {
         return this.tagService.getAllTags()
                 .stream()
                 .sorted(new Comparator<Tag>() {
