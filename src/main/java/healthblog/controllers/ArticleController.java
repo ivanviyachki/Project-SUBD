@@ -42,14 +42,14 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    private void addTagsToArticle(String[] tagsNames, Article article) {
+    private void addTagsToArticle(String[] tagsNames, Article article) throws SQLException {
         for (String tagName : tagsNames) {
             Tag tag = this.tagService.findTag(tagName);
 
             if(tag == null) {
                 tag = new Tag(tagName);
 
-                this.tagService.saveTag(tag);
+                this.tagService.createTag(tag);
             }
 
             article.addTag(tag);
