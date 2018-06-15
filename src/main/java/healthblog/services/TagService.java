@@ -1,5 +1,6 @@
 package healthblog.services;
 
+import healthblog.models.Article;
 import healthblog.models.Tag;
 
 import java.sql.SQLException;
@@ -11,13 +12,13 @@ public interface TagService {
 
     Tag findById(Integer id) throws SQLException;
 
+    List<Tag> getAllTags() throws SQLException;
+
     void createTag(Tag tag) throws SQLException;
 
     void updateTag(String name, Tag tag) throws SQLException;
 
     void deleteArticle(String name) throws SQLException;
-
-    List<Tag> getAllTags() throws SQLException;
 
     Set<Integer> getArticles(Integer TagId) throws SQLException;
 
