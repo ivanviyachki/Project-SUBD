@@ -1,9 +1,6 @@
 package healthblog.services;
 
-import healthblog.models.Article;
-import healthblog.models.Image;
-import healthblog.models.Tag;
-import healthblog.models.User;
+import healthblog.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +17,8 @@ public class ArticleServiceStubImpl implements ArticleService {
     private UserService userService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private CommentsService commentsService;
     @Autowired
     private TagService tagService;
 
@@ -42,9 +41,33 @@ public class ArticleServiceStubImpl implements ArticleService {
             this.imageService.createImage(image);
         }
 
-        for(Tag tag : article.getTags()) {
-            this.tagService.createTag(tag);
+        for(Comment comment : article.getComments()) {
+            this.commentsService.saveComment(comment);
         }
+
+        for(Tag tag : article.getTags()) {
+            Tag savedTag = this.tagService.findTag(tag.getName());
+            if(savedTag == null) {
+                this.tagService.createTag(tag);
+                saveArticleTagRelation(article.getId(), tag.getId());
+            } else {
+                saveArticleTagRelation(article.getId(), savedTag.getId());
+            }
+        }
+
+        this.jdbcConnection.closePreparedStatement(query);
+        this.jdbcConnection.closeConnection(con);
+    }
+
+    private void saveArticleTagRelation(Integer articleId, Integer tagId) throws SQLException {
+        Connection con = this.jdbcConnection.getConnection();
+        String statement = "INSERT INTO Articles_Tags(ArticleId, TagId) VALUES (?, ?)";
+        PreparedStatement query = this.jdbcConnection.getPreparedStatement(con, statement);
+
+        query.setInt( 1, articleId);
+        query.setInt( 2, tagId);
+
+        int affectedRows = this.jdbcConnection.executeUpdate(query);
 
         this.jdbcConnection.closePreparedStatement(query);
         this.jdbcConnection.closeConnection(con);
@@ -70,12 +93,15 @@ public class ArticleServiceStubImpl implements ArticleService {
 
             User user = this.userService.findById(authorId);
 
-            Set<Integer> resultRoles = this.tagService.getTags(articleId);
+            Set<Integer> resultTags = this.tagService.getTags(articleId);
 
-            Article article = new Article(articleId, category, title, content, user, date, resultRoles);
+            Article article = new Article(articleId, category, title, content, user, date, resultTags);
 
             List<Image> images = this.imageService.getAllImagesFromArticle(article);
             article.setImages(images);
+
+            List<Comment> comments = this.commentsService.getAllCommentsFromArticle(article);
+            article.setComments(comments);
 
             articles.add(article);
         }
@@ -107,12 +133,15 @@ public class ArticleServiceStubImpl implements ArticleService {
 
         User user = this.userService.findById(authorId);
 
-        Set<Integer> resultRoles = this.tagService.getTags(articleId);
+        Set<Integer> resultTags = this.tagService.getTags(articleId);
 
-        Article article = new Article(articleId, category, title, content, user, date, resultRoles);
+        Article article = new Article(articleId, category, title, content, user, date, resultTags);
 
         List<Image> images = this.imageService.getAllImagesFromArticle(article);
         article.setImages(images);
+
+        List<Comment> comments = this.commentsService.getAllCommentsFromArticle(article);
+        article.setComments(comments);
 
         this.jdbcConnection.closeResultSet(result);
         this.jdbcConnection.closePreparedStatement(query);
@@ -141,12 +170,15 @@ public class ArticleServiceStubImpl implements ArticleService {
 
         User user = this.userService.findById(authorId);
 
-        Set<Integer> resultRoles = this.tagService.getTags(articleId);
+        Set<Integer> resultTags = this.tagService.getTags(articleId);
 
-        Article article = new Article(articleId, category, resultTitle, content, user, date, resultRoles);
+        Article article = new Article(articleId, category, resultTitle, content, user, date, resultTags);
 
         List<Image> images = this.imageService.getAllImagesFromArticle(article);
         article.setImages(images);
+
+        List<Comment> comments = this.commentsService.getAllCommentsFromArticle(article);
+        article.setComments(comments);
 
         this.jdbcConnection.closeResultSet(result);
         this.jdbcConnection.closePreparedStatement(query);

@@ -1,9 +1,6 @@
 package healthblog.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Article {
     private Integer id;
@@ -18,6 +15,8 @@ public class Article {
 
     private List<Image> images;
 
+    private List<Comment> comments;
+
     private Date date = new Date();
 
     private List<Tag> tags;
@@ -26,7 +25,7 @@ public class Article {
 
     public Article() {   }
 
-    public Article(String category, String title, String content, User author, Date date, Set<Integer> tagsId) {
+    public Article(String category, String title, String content, User author, Date date) {
         this.category = category;
         this.title = title;
         this.content = content;
@@ -34,7 +33,8 @@ public class Article {
         this.date = date;
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
-        this.tagsId = tagsId;
+        this.comments = new ArrayList<>();
+        this.tagsId = new LinkedHashSet<>();
     }
 
     public Article(Integer id, String category, String title, String content, User author, Date date, Set<Integer> tagsId) {
@@ -46,6 +46,7 @@ public class Article {
         this.date = date;
         this.tags = new ArrayList<>();
         this.images = new ArrayList<>();
+        this.comments = new ArrayList<>();
         this.tagsId = tagsId;
     }
 
@@ -127,6 +128,22 @@ public class Article {
         this.tags.add(tag);
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Set<Integer> getTagsId() {
+        return tagsId;
+    }
+
+    public void setTagsId(Set<Integer> tagsId) {
+        this.tagsId = tagsId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,8 +157,10 @@ public class Article {
         if (content != null ? !content.equals(article.content) : article.content != null) return false;
         if (author != null ? !author.equals(article.author) : article.author != null) return false;
         if (images != null ? !images.equals(article.images) : article.images != null) return false;
+        if (comments != null ? !comments.equals(article.comments) : article.comments != null) return false;
         if (date != null ? !date.equals(article.date) : article.date != null) return false;
-        return tags != null ? tags.equals(article.tags) : article.tags == null;
+        if (tags != null ? !tags.equals(article.tags) : article.tags != null) return false;
+        return tagsId != null ? tagsId.equals(article.tagsId) : article.tagsId == null;
     }
 
     @Override
@@ -152,8 +171,10 @@ public class Article {
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (images != null ? images.hashCode() : 0);
+        result = 31 * result + (comments != null ? comments.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        result = 31 * result + (tagsId != null ? tagsId.hashCode() : 0);
         return result;
     }
 }
