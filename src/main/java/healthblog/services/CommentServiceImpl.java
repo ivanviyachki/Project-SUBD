@@ -1,6 +1,3 @@
-package healthblog.services;
-
-import healthblog.models.Article;
 import healthblog.models.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,6 +36,32 @@ public class CommentServiceImpl implements CommentsService {
 
 
             Comment comment = new Comment(commentId, content, article);
+        }
+
+        this.jdbcConnection.closeResultSet(result);
+        this.jdbcConnection.closePreparedStatement(query);
+        this.jdbcConnection.closeConnection(con);
+
+        return comments;
+    }
+
+    public List<Comment> getAllCommentsFromArticle(Article article) throws SQLException {
+        Connection con = this.jdbcConnection.getConnection();
+        String statement = "SELECT * FROM Comments WHERE ArticleId = ?";
+        PreparedStatement query = this.jdbcConnection.getPreparedStatement(con, statement);
+
+        //TODO CHECK INPUT
+
+        query.setInt( 1, article.getId());
+
+        ResultSet result = this.jdbcConnection.executeQuery(query);
+
+        List<Comment> comments = new ArrayList<>();
+        while (result.next()) {
+            Integer commentId = result.getInt("Id");
+            String content = result.getString("Content");
+
+            comments.add(new Comment(commentId, content, article));
         }
 
         this.jdbcConnection.closeResultSet(result);
