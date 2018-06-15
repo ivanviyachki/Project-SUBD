@@ -1,5 +1,9 @@
 package healthblog.controllers;
 
+import healthblog.models.Role;
+import healthblog.services.ArticleService;
+import healthblog.services.RoleService;
+import healthblog.services.UserService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,35 +16,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import healthblog.bindingModels.UserBindingModel;
-import healthblog.models.Article;
-import healthblog.models.Role;
 import healthblog.models.User;
-import healthblog.repositories.ArticleRepository;
-import healthblog.repositories.RoleRepository;
-import healthblog.repositories.UserRepository;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.LinkedHashSet;
 
 @Controller
 public class UserController {
-
-//    @Autowired
-//    RoleRepository roleRepository;
-//    @Autowired
-//    UserRepository userRepository;
-
-    private final ArticleRepository articleRepository;
-
-    private final UserRepository userRepository;
-
-    private final RoleRepository roleRepository;
-
     @Autowired
-    public UserController(ArticleRepository articleRepository, UserRepository userRepository, RoleRepository roleRepository) {
-        this.articleRepository = articleRepository;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private ArticleService articleService;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -50,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerProcess(UserBindingModel userBindingModel){
+    public String registerProcess(UserBindingModel userBindingModel) throws SQLException {
 
         if(!userBindingModel.getPassword().equals(userBindingModel.getConfirmPassword())){
             return "redirect:/register";
@@ -64,11 +53,11 @@ public class UserController {
                 bCryptPasswordEncoder.encode(userBindingModel.getPassword())
         );
 
-        Role userRole = this.roleRepository.findByName("ROLE_USER");
+        Role userRole = this.roleService.findByName("ROLE_USER");
 
-        user.addRole(userRole);
+        user.addRoleId(userRole.getId());
 
-        this.userRepository.saveAndFlush(user);
+        this.userService.createUser(user);
 
         return "redirect:/login";
     }
@@ -93,12 +82,12 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profilePage(Model model){
+    public String profilePage(Model model) throws SQLException {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 
-        User user = this.userRepository.findByEmail(principal.getUsername());
+        User user = this.userService.findByEmail(principal.getUsername());
 
         //Set<Article> articles = user.getArticles();
 
@@ -109,26 +98,6 @@ public class UserController {
         model.addAttribute("user", user);
         //model.addAttribute("articles", articles);
         model.addAttribute("view", "user/profile");
-
-        return "base-layout";
-    }
-
-    @GetMapping("profile/article/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public String articleDetails(Model model, @PathVariable Integer id){
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        User user = this.userRepository.findByEmail(principal.getUsername());
-
-        Article article = this.articleRepository.findOne(id);
-
-        if(article == null) return "redirect:/";
-
-        model.addAttribute("user", user);
-        model.addAttribute("article", article);
-        model.addAttribute("view", "user/articleDetails");
 
         return "base-layout";
     }

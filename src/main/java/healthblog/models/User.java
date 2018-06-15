@@ -27,6 +27,14 @@ public class User {
         this.articlesId = articlesId;
     }
 
+    public User(String email, String fullName, String password) {
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        this.rolesId = new HashSet<>();
+        this.articlesId = new HashSet<>();
+    }
+
     public User() {
         rolesId = new HashSet<>();
         articlesId = new HashSet<>();
@@ -70,6 +78,10 @@ public class User {
 
     public void setRolesId(Set<Integer> rolesId) {
         this.rolesId = rolesId;
+    }
+
+    public void addRoleId(Integer id) {
+        this.rolesId.add(id);
     }
 
     public Set<Integer> getArticlesId() {
